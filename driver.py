@@ -39,11 +39,11 @@ def menu() -> None:
             else:
                 print("Invalid choice.")
 
-        except:
-            print("Please enter a numerical value.")
+        except Exception as e:
+            print("Please enter a numerical value.\n",e)
 
 def run_default() -> None:
-    for res in prolog.query("run(3, [_,(2,3)], (1,3), 2, [_,(3,1),(3,3),(4,4)])."):
+    for res in prolog.query("run(1, [_,r(2,3)], r(1,3), 3, [_,r(3,1),r(3,3),r(4,4)])."):
         print(res)
 
 def get_input() -> None:
@@ -65,7 +65,7 @@ def get_input() -> None:
                     coin_coord = input("Please enter Coordinate for Coin {}: ".format(index))
                     if (re.match('\([1-7],[1-6]\)', coin_coord)):
                         #TODO: Check that coord is not occupied
-                        list_of_coin_coord+=","+coin_coord
+                        list_of_coin_coord+=",r"+coin_coord
 
                     else:
                         print("Please enter a coordinate in (X,Y) where 0 < X < 8 and 0 < Y < 7. \n")
@@ -89,7 +89,7 @@ def get_input() -> None:
                     pit_coord = input("Please enter Coordinate for Pit {}: ".format(index))
                     if (re.match('\([1-7],[1-6]\)', pit_coord)):
                         #TODO: Check that coord is not occupied
-                        list_of_pit_coord+=","+pit_coord
+                        list_of_pit_coord+=",r"+pit_coord
 
                     else:
                         print("Please enter a coordinate in (X,Y) where 0 < X < 8 and 0 < Y < 7. \n")
@@ -106,7 +106,7 @@ def get_input() -> None:
             #TODO: Check that coord is not occupied
             for res in prolog.query("run({}, [_{}], {}, {}, [_{}]).".format(number_of_coins, 
                                                                             list_of_coin_coord, 
-                                                                            wumpus_coord, 
+                                                                            "r"+wumpus_coord, 
                                                                             number_of_pits,
                                                                             list_of_pit_coord)):
                 print(res)

@@ -51,7 +51,8 @@ maxNumberOfActionsPlanned(20).
 
 % Hunter Position and Facing Direction on each situation
 hunter(r(1,1),e,s0). %Start at cave entry r(1,1), facing east
-hunter(Reference,Direction,do(Action,Situation)) :- hunter(PreviousReference,PreviousDirection,Situation), %get hunter info at last situation
+hunter(Reference,Direction,do(Action,Situation)) :- 
+    hunter(PreviousReference,PreviousDirection,Situation), %get hunter info at last situation
     ( %if action changes hunter position
         (Action = left, Reference = PreviousReference, ((PreviousDirection = n, Direction = w)
                                                         ;
@@ -323,37 +324,40 @@ runManyMaps(N0,NF) :- %Runs map N0 until NF inclusive in sequence.
 %     N1 is N0+1,
 %     (N1 =< NF -> runInSequence(N1,NF) ; true). %Run next map if not done.
 
-run(NumberOfCoins, [_ | ListCoinsCoord], WumpusCoord, NumberOfPits, [_ |ListPitsCoord]) :-
+run(NumberOfCoins, [_|ListCoinsCoord], WumpusCoord, NumberOfPits, [_|ListPitsCoord]) :-
     format('No of coins: ~p', NumberOfCoins), nl,
     format('List of coins: ~p', [ListCoinsCoord]), nl,
     format('Wumpus Coord: ~p', WumpusCoord), nl,
     format('No of Pits: ~p', NumberOfPits), nl,
-    format('List of Pits: ~p', [ListPitsCoord]),
+    format('List of Pits: ~p', [ListPitsCoord]), nl,
 
     clearWorld,
     buildWalls,
-    iterateCoinsList([ListCoinsCoord]), %set coins
-    iteratePitsList([ListPitsCoord]), %set pits
-    asserta(w_Wumpus(r(WumpusCoord))), %set wumpus
+    asserta(w_Wumpus(WumpusCoord)), %set wumpus
+    format('~p', WumpusCoord),nl,
+    iterateCoinsList(ListCoinsCoord), %set coins
+    iteratePitsList(ListPitsCoord), %set pits
+
     % asserta(w_Gold(r(2,3))),
     % asserta(w_Wumpus(r(1,3))),
     % asserta(w_Pit(r(3,1))),
     % asserta(w_Pit(r(3,3))),
-    % asserta(w_Pit(r(4,4))),
+    % asserta(w_Pit(r(4,4))),    
 
-    
-    % buildWorld(NumberOfCoins, [_ |ListCoinsCoord], WumpusCoord, NumberOfPits, [_ |ListPitsCoord]),
+
     format('~n~n~n   Playing on world ~d ~n~n~n', 1),
     callTime(runloop(0,s0)).
 
 iterateCoinsList([]).
 iterateCoinsList([H|T]) :- 
-    asserta(w_Gold(r(H))),
+    asserta(w_Gold(H)),
+    format('~p', H),nl,
     iterateCoinsList(T).
 
 iteratePitsList([]).
-iteratePitsList([H|T]) :- 
-    asserta(w_Pit(r(H))),
+iteratePitsList([H|T]) :-
+    format('~p', H),nl, 
+    asserta(w_Pit(H)),
     iteratePitsList(T).
 
 %Removes all objects from world
@@ -371,52 +375,29 @@ buildWalls :-
     asserta(w_Wall(r(0,3))),
     asserta(w_Wall(r(0,4))),
     asserta(w_Wall(r(0,5))),
-    asserta(w_Wall(r(1,5))),
-    asserta(w_Wall(r(2,5))),
-    asserta(w_Wall(r(3,5))),
-    asserta(w_Wall(r(4,5))),
-    asserta(w_Wall(r(5,5))),
-    asserta(w_Wall(r(5,4))),
-    asserta(w_Wall(r(5,3))),
-    asserta(w_Wall(r(5,2))),
-    asserta(w_Wall(r(5,1))),
+    asserta(w_Wall(r(0,6))),
+
+    asserta(w_Wall(r(1,6))),
+    asserta(w_Wall(r(2,6))),
+    asserta(w_Wall(r(3,6))),
+    asserta(w_Wall(r(4,6))),
+    asserta(w_Wall(r(5,6))),
+    asserta(w_Wall(r(6,6))),
+    asserta(w_Wall(r(7,6))),
+
+    asserta(w_Wall(r(7,5))),
+    asserta(w_Wall(r(7,4))),
+    asserta(w_Wall(r(7,3))),
+    asserta(w_Wall(r(7,2))),
+    asserta(w_Wall(r(7,1))),
+
+    asserta(w_Wall(r(7,0))),
+    asserta(w_Wall(r(6,0))),
     asserta(w_Wall(r(5,0))),
     asserta(w_Wall(r(4,0))),
     asserta(w_Wall(r(3,0))),
     asserta(w_Wall(r(2,0))),
     asserta(w_Wall(r(1,0))).
-    % asserta(w_Wall(r(0,0))),
-    % asserta(w_Wall(r(0,1))),
-    % asserta(w_Wall(r(0,2))),
-    % asserta(w_Wall(r(0,3))),
-    % asserta(w_Wall(r(0,4))),
-    % asserta(w_Wall(r(0,5))),
-    % asserta(w_Wall(r(0,6))),
-
-
-    % asserta(w_Wall(r(1,7))),
-    % asserta(w_Wall(r(2,7))),
-    % asserta(w_Wall(r(3,7))),
-    % asserta(w_Wall(r(4,7))),
-    % asserta(w_Wall(r(5,7))),
-    % asserta(w_Wall(r(6,7))),
-    % asserta(w_Wall(r(7,7))),
-
-    % asserta(w_Wall(r(7,6))),
-    % asserta(w_Wall(r(7,5))),
-    % asserta(w_Wall(r(7,4))),
-    % asserta(w_Wall(r(7,3))),
-    % asserta(w_Wall(r(7,2))),
-    % asserta(w_Wall(r(7,1))),
-
-    % asserta(w_Wall(r(8,0))),
-    % asserta(w_Wall(r(7,0))),
-    % asserta(w_Wall(r(6,0))),
-    % asserta(w_Wall(r(5,0))),
-    % asserta(w_Wall(r(4,0))),
-    % asserta(w_Wall(r(3,0))),
-    % asserta(w_Wall(r(2,0))),
-    % asserta(w_Wall(r(1,0))).
 
 % This clause is called before the actual loop to check if maximum
 % number of moves has been reached (Stops if its taking too long)
